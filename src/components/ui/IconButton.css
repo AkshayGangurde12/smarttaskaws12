@@ -1,0 +1,109 @@
+/* ============================================
+   ICON BUTTON COMPONENT STYLES
+   ============================================ */
+
+.icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.icon-btn:focus {
+  outline: none;
+}
+
+.icon-btn:focus-visible {
+  outline: 3px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 2px;
+}
+
+/* Icon Button Sizes */
+.icon-btn-small {
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+}
+
+.icon-btn-medium {
+  width: 40px;
+  height: 40px;
+  font-size: 1.25rem;
+}
+
+.icon-btn-large {
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
+}
+
+/* Icon Button Variants */
+.icon-btn-ghost {
+  background: transparent;
+  color: #6b7280;
+}
+
+.icon-btn-ghost:hover:not(:disabled):not(.icon-btn-disabled) {
+  background: rgba(0, 0, 0, 0.05);
+  color: #374151;
+}
+
+.icon-btn-primary {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.icon-btn-primary:hover:not(:disabled):not(.icon-btn-disabled) {
+  background: rgba(102, 126, 234, 0.2);
+  transform: scale(1.05);
+}
+
+.icon-btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.icon-btn-danger:hover:not(:disabled):not(.icon-btn-disabled) {
+  background: rgba(239, 68, 68, 0.2);
+  transform: scale(1.05);
+}
+
+/* Disabled State */
+.icon-btn:disabled,
+.icon-btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Icon */
+.icon-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Dark Mode */
+body.dark-mode .icon-btn-ghost {
+  color: #9ca3af;
+}
+
+body.dark-mode .icon-btn-ghost:hover:not(:disabled):not(.icon-btn-disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e5e7eb;
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .icon-btn {
+    transition: none;
+  }
+}
