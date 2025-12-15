@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import GoalForm from '../components/GoalForm';
@@ -10,15 +11,23 @@ function PlannerPage() {
   const [plan, setPlan] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { user } = useAuth(); // Get authenticated user
 
-  // Save plan to history when created
+  // Create user-specific localStorage key
+  const getHistoryKey = () => {
+    if (!user) return 'planHistory';
+    return `planHistory_${user._id || user.id}`;
+  };
+
+  // Save plan to user-specific history when created
   useEffect(() => {
-    if (plan) {
-      const history = JSON.parse(localStorage.getItem('planHistory') || '[]');
+    if (plan && user) {
+      const historyKey = getHistoryKey();
+      const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
       const newHistory = [plan, ...history].slice(0, 10); // Keep last 10 plans
-      localStorage.setItem('planHistory', JSON.stringify(newHistory));
+      localStorage.setItem(historyKey, JSON.stringify(newHistory));
     }
-  }, [plan]);
+  }, [plan, user]);
 
   const handleCreatePlan = async (goalText) => {
     try {
@@ -26,9 +35,18 @@ function PlannerPage() {
       setError('');
       setPlan(null);
 
+      // Get auth token
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Please login to create plans');
+      }
+
       const res = await fetch('http://localhost:5000/api/plan', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ goalText }),
       });
 
@@ -61,11 +79,56 @@ function PlannerPage() {
       <Header />
       
       <main className="planner-container">
+        {/* Enhanced Hero with User Greeting */}
         <div className="planner-hero">
-          <h1>🎯 Smart Task Planner</h1>
-          <p className="planner-subtitle">
-            Transform your goals into actionable tasks with AI-powered planning
-          </p>
+          <div className="hero-decoration">
+            <div className="floating-circle circle-1"></div>
+            <div className="floating-circle circle-2"></div>
+            <div className="floating-circle circle-3"></div>
+          </div>
+          
+          <div className="hero-content">
+            {user && (
+              <div className="user-greeting">
+                <div className="greeting-avatar">
+                  <span className="avatar-icon">👤</span>
+                </div>
+                <div className="greeting-text">
+                  <p className="greeting-welcome">Welcome back,</p>
+                  <h2 className="greeting-name">{user.name || user.email}</h2>
+                </div>
+              </div>
+            )}
+            
+            <h1>🎯 Smart Task Planner</h1>
+            <p className="planner-subtitle">
+              Transform your goals into actionable tasks with AI-powered planning
+            </p>
+            
+            <div className="hero-stats">
+              <div className="hero-stat-item">
+                <div className="stat-icon">✨</div>
+                <div className="stat-info">
+                  <div className="stat-number">AI-Powered</div>
+                  <div className="stat-label">Planning</div>
+                </div>
+              </div>
+              <div className="hero-stat-item">
+                <div className="stat-icon">📊</div>
+                <div className="stat-info">
+                  <div className="stat-number">Smart</div>
+                  <div className="stat-label">Breakdown</div>
+                </div>
+              </div>
+              <div className="hero-stat-item">
+                <div className="stat-icon">🎯</div>
+                <div className="stat-info">
+                  <div className="stat-number">Goal</div>
+                  <div className="stat-label">Tracking</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <GoalForm 

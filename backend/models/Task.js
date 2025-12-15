@@ -7,6 +7,11 @@ const commentSchema = new mongoose.Schema({
 });
 
 const taskSchema = new mongoose.Schema({
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  },
   goalId: { type: mongoose.Schema.Types.ObjectId, ref: 'Goal', required: true },
   title: { type: String, required: true },
   description: String,

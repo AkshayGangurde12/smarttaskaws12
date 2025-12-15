@@ -1,12 +1,30 @@
 const Task = require('../models/Task');
 
 /**
- * Get all tasks for a goal
+ * Helper function to find task and verify ownership
+ */
+const findTaskByUser = async (taskId, userId) => {
+  const task = await Task.findOne({ _id: taskId, userId });
+  if (!task) {
+    throw new Error('Task not found or you do not have permission');
+  }
+  return task;
+};
+
+/**
+ * Get all tasks for a goal (filtered by user)
  */
 exports.getTasks = async (req, res) => {
   try {
     const { goalId } = req.params;
-    const tasks = await Task.find({ goalId }).sort({ order: 1 });
+    const userId = req.user.id; // Get authenticated user ID
+    
+    // Find tasks that belong to this user and goal
+    const tasks = await Task.find({ 
+      goalId, 
+      userId 
+    }).sort({ order: 1 });
+    
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching tasks', error: error.message });
@@ -14,14 +32,20 @@ exports.getTasks = async (req, res) => {
 };
 
 /**
- * Get single task
+ * Get single task (verify ownership)
  */
 exports.getTask = async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
+    const userId = req.user.id;
+    const task = await Task.findOne({ 
+      _id: req.params.id,
+      userId 
+    });
+    
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
+    
     res.json(task);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching task', error: error.message });
@@ -29,12 +53,16 @@ exports.getTask = async (req, res) => {
 };
 
 /**
- * Update task status
+ * Update task status (verify ownership)
  */
 exports.updateStatus = async (req, res) => {
   try {
     const { status } = req.body;
-    const task = await Task.findById(req.params.id);
+    const userId = req.user.id;
+    const task = await Task.findOne({ 
+      _id: req.params.id,
+      userId 
+    });
     
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
@@ -59,13 +87,14 @@ exports.updateStatus = async (req, res) => {
 };
 
 /**
- * Update task priority
+ * Update task priority (verify ownership)
  */
 exports.updatePriority = async (req, res) => {
   try {
     const { priority } = req.body;
-    const task = await Task.findByIdAndUpdate(
-      req.params.id,
+    const userId = req.user.id;
+    const task = await Task.findOneAndUpdate(
+      { _id: req.params.id, userId },
       { priority },
       { new: true }
     );
@@ -81,13 +110,14 @@ exports.updatePriority = async (req, res) => {
 };
 
 /**
- * Assign task to user
+ * Assign task to user (verify ownership)
  */
 exports.assignTask = async (req, res) => {
   try {
     const { assignee } = req.body;
-    const task = await Task.findByIdAndUpdate(
-      req.params.id,
+    const userId = req.user.id;
+    const task = await Task.findOneAndUpdate(
+      { _id: req.params.id, userId },
       { assignee },
       { new: true }
     );
@@ -103,12 +133,13 @@ exports.assignTask = async (req, res) => {
 };
 
 /**
- * Update task progress
+ * Update task progress (verify ownership)
  */
 exports.updateProgress = async (req, res) => {
   try {
     const { progress } = req.body;
-    const task = await Task.findById(req.params.id);
+    const userId = req.user.id;
+    const task = await Task.findOne({ _id: req.params.id, userId });
     
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
@@ -134,12 +165,13 @@ exports.updateProgress = async (req, res) => {
 };
 
 /**
- * Add comment to task
+ * Add comment to task (verify ownership)
  */
 exports.addComment = async (req, res) => {
   try {
     const { text, author } = req.body;
-    const task = await Task.findById(req.params.id);
+    const userId = req.user.id;
+    const task = await Task.findOne({ _id: req.params.id, userId });
     
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
@@ -147,7 +179,7 @@ exports.addComment = async (req, res) => {
 
     task.comments.push({
       text,
-      author: author || 'User',
+      author: author || req.user.name || 'User',
       createdAt: new Date()
     });
     
@@ -159,13 +191,14 @@ exports.addComment = async (req, res) => {
 };
 
 /**
- * Add/remove labels
+ * Add/remove labels (verify ownership)
  */
 exports.updateLabels = async (req, res) => {
   try {
     const { labels } = req.body;
-    const task = await Task.findByIdAndUpdate(
-      req.params.id,
+    const userId = req.user.id;
+    const task = await Task.findOneAndUpdate(
+      { _id: req.params.id, userId },
       { labels },
       { new: true }
     );
@@ -181,12 +214,13 @@ exports.updateLabels = async (req, res) => {
 };
 
 /**
- * Block/unblock task
+ * Block/unblock task (verify ownership)
  */
 exports.blockTask = async (req, res) => {
   try {
     const { blocked, reason } = req.body;
-    const task = await Task.findById(req.params.id);
+    const userId = req.user.id;
+    const task = await Task.findOne({ _id: req.params.id, userId });
     
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
@@ -208,12 +242,13 @@ exports.blockTask = async (req, res) => {
 };
 
 /**
- * Get task statistics
+ * Get task statistics (filtered by user)
  */
 exports.getStatistics = async (req, res) => {
   try {
     const { goalId } = req.params;
-    const tasks = await Task.find({ goalId });
+    const userId = req.user.id;
+    const tasks = await Task.find({ goalId, userId });
     
     const stats = {
       total: tasks.length,

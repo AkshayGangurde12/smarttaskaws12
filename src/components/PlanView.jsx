@@ -25,6 +25,13 @@ function PlanView({ goal, tasks, onReset }) {
       if (!matchesSearch) return false;
     }
 
+    // Status filter (completed/pending)
+    if (filters.filter === 'completed') {
+      return completedTasks[task._id] === true;
+    } else if (filters.filter === 'pending') {
+      return !completedTasks[task._id];
+    }
+
     // Type filter
     if (filters.filter === 'independent') {
       return task.dependsOn === null || task.dependsOn === undefined;
@@ -71,16 +78,33 @@ function PlanView({ goal, tasks, onReset }) {
 
   return (
     <div className="plan-view">
+      {/* Enhanced Plan Header */}
       <div className="plan-header">
+        <div className="plan-header-decoration">
+          <div className="decoration-orb orb-1"></div>
+          <div className="decoration-orb orb-2"></div>
+        </div>
+        
         <div className="plan-header-top">
-          <h2>📋 Your Action Plan</h2>
+          <div className="plan-title-section">
+            <div className="plan-icon-wrapper">
+              <span className="plan-icon">📋</span>
+            </div>
+            <h2>Your Action Plan</h2>
+          </div>
           <div className="plan-actions">
             <ViewToggle currentView={currentView} onViewChange={setCurrentView} />
             <ExportMenu plan={{ goal, tasks }} />
           </div>
         </div>
         
-        <p className="goal-text">{goal.text}</p>
+        <div className="goal-display">
+          <div className="goal-label">
+            <span className="goal-label-icon">🎯</span>
+            <span>Goal</span>
+          </div>
+          <p className="goal-text">{goal.text}</p>
+        </div>
         
         {/* Progress Bar */}
         {completedCount > 0 && (
@@ -165,6 +189,7 @@ function PlanView({ goal, tasks, onReset }) {
                 <TaskCard 
                   key={task._id} 
                   task={task}
+                  isCompleted={completedTasks[task._id] || false}
                   onToggleComplete={handleToggleComplete}
                 />
               ))}

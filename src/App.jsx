@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import PlannerPage from './pages/PlannerPage';
-import './App.css';
+import './styles/index.css';
 
 function App() {
   return (

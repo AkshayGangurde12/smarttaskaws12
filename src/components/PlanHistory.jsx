@@ -1,16 +1,33 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 function PlanHistory({ onSelectPlan }) {
   const [history, setHistory] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth(); // Get current user
+
+  // Create user-specific localStorage key
+  const getHistoryKey = () => {
+    if (!user) return 'planHistory'; // Fallback for non-authenticated
+    return `planHistory_${user._id || user.id}`; // User-specific key
+  };
 
   useEffect(() => {
-    // Load history from localStorage
-    const savedHistory = localStorage.getItem('planHistory');
-    if (savedHistory) {
-      setHistory(JSON.parse(savedHistory));
+    // Load history from user-specific localStorage
+    if (user) {
+      const savedHistory = localStorage.getItem(getHistoryKey());
+      if (savedHistory) {
+        try {
+          setHistory(JSON.parse(savedHistory));
+        } catch (error) {
+          console.error('Error parsing history:', error);
+          setHistory([]);
+        }
+      } else {
+        setHistory([]);
+      }
     }
-  }, []);
+  }, [user]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -29,8 +46,8 @@ function PlanHistory({ onSelectPlan }) {
   };
 
   const handleClearHistory = () => {
-    if (window.confirm('Are you sure you want to clear all history?')) {
-      localStorage.removeItem('planHistory');
+    if (window.confirm('Are you sure you want to clear all your history?')) {
+      localStorage.removeItem(getHistoryKey());
       setHistory([]);
     }
   };

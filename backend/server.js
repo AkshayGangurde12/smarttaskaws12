@@ -1,4 +1,3 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -10,6 +9,7 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 
 const planRoutes = require('./routes/planRoutes');
 const taskRoutes = require('./routes/taskRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -18,6 +18,7 @@ app.use(express.json());
 
 app.use('/api/plan', planRoutes);
 app.use('/api/tasks', taskRoutes);
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('Smart Task Planner API is running');

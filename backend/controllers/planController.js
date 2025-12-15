@@ -8,6 +8,7 @@ const { generatePlan } = require('../services/llmService');
 exports.createPlan = async (req, res) => {
   try {
     const { goalText } = req.body;
+    const userId = req.user.id; // Get authenticated user ID
 
     // Validation
     if (!goalText) {
@@ -24,14 +25,18 @@ exports.createPlan = async (req, res) => {
       });
     }
 
-    // Create goal in database
-    const goal = await Goal.create({ text: goalText });
+    // Create goal in database with user association
+    const goal = await Goal.create({ 
+      text: goalText,
+      userId: userId 
+    });
 
     // Generate plan using LLM service (OpenAI or enhanced mock)
     const plan = await generatePlan(goalText);
 
-    // Prepare tasks for database
+    // Prepare tasks for database with user association
     const tasksToSave = plan.tasks.map(t => ({
+      userId: userId,
       goalId: goal._id,
       title: t.title,
       description: t.description || '',

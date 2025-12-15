@@ -1,0 +1,25 @@
+/* 
+ * Smart Task Planner - Modular CSS Architecture
+ * Import all stylesheets in the correct order
+ */
+
+/* 1. Base styles (reset, global, layouts) */
+@import './base.css';
+
+/* 2. Animations (keyframes need to be defined early) */
+@import './animations.css';
+
+/* 3. Components */
+@import './header.css';
+@import './footer.css';
+@import './hero.css';
+@import './forms.css';
+@import './buttons.css';
+@import './task-card.css';
+@import './components.css';
+
+/* 4. Theme (dark mode overrides) */
+@import './theme.css';
+
+/* 5. Responsive (media queries should be last) */
+@import './responsive.css';

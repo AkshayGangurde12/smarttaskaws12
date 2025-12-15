@@ -1,0 +1,90 @@
+/* Theme Toggle and Dark Mode */
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  border-color: #667eea;
+  transform: rotate(15deg) scale(1.1);
+}
+
+.mobile-actions {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+body.dark-mode .app-header {
+  background: rgba(26, 26, 46, 0.95);
+}
+
+body.dark-mode .logo-text,
+body.dark-mode .nav-link {
+  color: #e5e7eb;
+}
+
+body.dark-mode .theme-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .goal-form,
+body.dark-mode .plan-header,
+body.dark-mode .task-card {
+  background: rgba(26, 26, 46, 0.95);
+  color: #e5e7eb;
+}
+
+body.dark-mode .textarea {
+  background: rgba(15, 23, 42, 0.8);
+  color: #e5e7eb;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .label,
+body.dark-mode .task-title,
+body.dark-mode .goal-text {
+  color: #e5e7eb;
+}
+
+body.dark-mode .task-description,
+body.dark-mode .char-counter {
+  color: #9ca3af;
+}
+
+body.dark-mode .task-checkbox {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .progress-bar {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .status-pending {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+body.dark-mode .status-completed {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.4);
+}
