@@ -1,0 +1,32 @@
+version: '3.8'
+
+# Test deployment to verify Docker images work
+services:
+  backend:
+    image: akshaygangurde/smart_task:backend
+    container_name: smart-task-test-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      # Using a dummy MongoDB URI for testing
+      - MONGO_URI=mongodb://localhost:27017/test
+      - JWT_SECRET=test-jwt-secret
+      - GROQ_API_KEY=test-groq-key
+    restart: "no"
+    networks:
+      - app-network
+
+  frontend:
+    image: akshaygangurde/smart_task:frontend
+    container_name: smart-task-test-frontend
+    ports:
+      - "8080:80"
+    restart: "no"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
