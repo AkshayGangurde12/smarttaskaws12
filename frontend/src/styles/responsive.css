@@ -1,0 +1,137 @@
+/* Responsive Design and Media Queries */
+
+/* Tablet and below */
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+/* Mobile and below */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .goal-form,
+  .plan-header {
+    padding: 1.5rem;
+  }
+
+  .form-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .plan-stats {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .task-card {
+    padding: 1.25rem;
+  }
+
+  .task-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .mobile-actions {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .tagline {
+    display: none;
+  }
+
+  .logo-text {
+    font-size: 1.25rem;
+  }
+
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-bottom-links {
+    justify-content: center;
+  }
+
+  .export-dropdown {
+    right: auto;
+    left: 0;
+  }
+
+  .plan-header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .header-content {
+    padding: 0.75rem 1rem;
+  }
+
+  .footer-content {
+    padding: 2rem 1rem 1rem;
+  }
+
+  .social-links {
+    justify-content: flex-start;
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white;
+  }
+
+  .goal-form,
+  .btn-primary,
+  .btn-secondary {
+    display: none;
+  }
+
+  .task-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+  }
+}
